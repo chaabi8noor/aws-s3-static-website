@@ -16,9 +16,9 @@ Completed as a guided lab using [NextWork — Host a Website on Amazon S3](https
 | Region shown in endpoint | `eu-west-3` |
 | Entry page | `index.html` |
 | Evidence captured | October 13, 2026 |
-| Result | Website rendered at the S3 website endpoint in the final screenshot |
+| Result | Website rendered at the S3 website endpoint; deletion attempt for `index.html` returned Access denied |
 
-This repository contains the project write-up and five screenshots. It does not contain the website source or automated deployment scripts. The screenshots record the lab result; current endpoint availability and resource cleanup have not been verified.
+This repository contains the project write-up and six screenshots. It does not contain the website source or automated deployment scripts. The screenshots record the lab result; current endpoint availability and resource cleanup have not been verified.
 
 ## How it works
 
@@ -58,7 +58,7 @@ The linked tutorial's resolution is to make the website objects publicly readabl
 
 ### 4. Verify the page loads
 
-The final screenshot shows the NextWork sample page, including its images, rendered at the same endpoint that previously returned the error:
+The working-website screenshot shows the NextWork sample page, including its images, rendered at the same endpoint that previously returned the error:
 
 ```text
 http://website-project-nour.s3-website.eu-west-3.amazonaws.com
@@ -90,7 +90,22 @@ Policy transcribed from the screenshot:
 }
 ```
 
-The screenshot captures the policy being edited, but does not show a successful save or a deletion test. This statement concerns deletion; it does not grant public read access or establish what resolved the earlier website access error.
+The screenshot captures the policy being edited. This statement concerns deletion; it does not grant public read access or establish what resolved the earlier website access error.
+
+### 6. Test deletion of index.html
+
+The deletion-status screenshot records an attempt to delete `index.html` from `website-project-nour`:
+
+| Check | Observed result |
+| --- | --- |
+| Successfully deleted | 0 objects |
+| Failed to delete | 1 object, 58.8 KB |
+| Object | `index.html` |
+| Error | Access denied |
+
+![Deletion test showing index.html could not be deleted because access was denied](screenshots/06-delete-test-access-denied.png)
+
+The attempted deletion was blocked, consistent with the intended effect of the policy shown above. The error screen does not identify the specific policy responsible, but it provides evidence of the observed test result. This failed deletion is not evidence of completed resource cleanup.
 
 ## Key takeaways
 
@@ -105,7 +120,6 @@ The browser's **Not secure** label is consistent with this HTTP endpoint: S3 web
 ## Follow-up notes
 
 - **Permissions evidence:** add a screenshot or short note confirming the change that resolved the 403 error.
-- **Bucket-policy verification:** confirm that the deletion-deny policy was saved and capture the result of testing it.
 - **Cleanup status:** confirm whether the lab bucket and objects have been removed or are intentionally being kept. Cleanup is not shown in this evidence.
 - **Possible next project:** add HTTPS delivery with CloudFront and document the new architecture.
 
