@@ -18,7 +18,7 @@ Completed as a guided lab using [NextWork — Host a Website on Amazon S3](https
 | Evidence captured | October 13, 2026 |
 | Result | Website rendered at the S3 website endpoint in the final screenshot |
 
-This repository contains the project write-up and four screenshots. It does not contain the website source or automated deployment scripts. The screenshots record the lab result; current endpoint availability and resource cleanup have not been verified.
+This repository contains the project write-up and five screenshots. It does not contain the website source or automated deployment scripts. The screenshots record the lab result; current endpoint availability and resource cleanup have not been verified.
 
 ## How it works
 
@@ -66,18 +66,46 @@ http://website-project-nour.s3-website.eu-west-3.amazonaws.com
 
 This demonstrates that the page loaded at capture time. It does not verify every link or the email waitlist form.
 
+### 5. Explore a bucket policy to prevent deletion
+
+For the tutorial's optional bucket-policy exercise, the additional screenshot shows a policy in the editor targeting `index.html`. Its statement denies `s3:DeleteObject` to all principals (`"Principal": "*"`) for that specific object.
+
+![Bucket policy editor showing a deny statement for deletion of index.html](screenshots/05-bucket-policy-deny-delete.png)
+
+Policy transcribed from the screenshot:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Id": "MyBucketPolicy",
+  "Statement": [
+    {
+      "Sid": "BucketPutDelete",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:DeleteObject",
+      "Resource": "arn:aws:s3:::website-project-nour/index.html"
+    }
+  ]
+}
+```
+
+The screenshot captures the policy being edited, but does not show a successful save or a deletion test. This statement concerns deletion; it does not grant public read access or establish what resolved the earlier website access error.
+
 ## Key takeaways
 
 - An S3 bucket can hold an HTML entry page and its supporting assets.
 - Static website hosting uses an index document to serve the home page.
 - A configured website endpoint still needs readable content.
 - Capturing both the error and the successful result makes troubleshooting easier to explain.
+- A bucket policy can target a specific object and action, as shown by the deletion-deny statement for `index.html`.
 
 The browser's **Not secure** label is consistent with this HTTP endpoint: S3 website endpoints do not support HTTPS. See [AWS: Website endpoints](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteEndpoints.html).
 
 ## Follow-up notes
 
 - **Permissions evidence:** add a screenshot or short note confirming the change that resolved the 403 error.
+- **Bucket-policy verification:** confirm that the deletion-deny policy was saved and capture the result of testing it.
 - **Cleanup status:** confirm whether the lab bucket and objects have been removed or are intentionally being kept. Cleanup is not shown in this evidence.
 - **Possible next project:** add HTTPS delivery with CloudFront and document the new architecture.
 
